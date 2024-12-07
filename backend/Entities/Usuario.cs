@@ -11,5 +11,9 @@ namespace Entities
     {
         public string Nome { get; set; }
         public string? ImagemPerfilUrl { get; set; }
+        public ICollection<UsuariosConversa> ParticipacaoEmConversas { get; } =  new List<UsuariosConversa>();
+        public ICollection<Mensagem> MensagensEnviadas { get; } =  new List<Mensagem       >();
+        public ICollection<AnuncioAnimal> Anuncios { get; } =  new List<AnuncioAnimal>();
     }
 }
+                

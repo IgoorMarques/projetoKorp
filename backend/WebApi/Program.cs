@@ -16,11 +16,34 @@ using Entities.Context;
 using Domain.Interfaces;
 using System.Text;
 using Entities;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adiciona suporte a controllers e views (para API, é mais comum usar apenas Controllers)
 builder.Services.AddControllers();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "API de Usuários",
+        Version = "v1",
+        Description = "API para gerenciamento de usuários",
+        Contact = new OpenApiContact
+        {
+            Name = "Seu Nome",
+            Email = "seuemail@dominio.com"
+        }
+    });
+
+    // Inclua as anotações dos comentários de código XML
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
+
 
 // Adiciona suporte à geração de documentação de API com Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -36,6 +59,9 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
+
+builder.Services.AddEndpointsApiExplorer();
+
 
 // Configurar a string de conexão com o banco de dados
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -66,7 +92,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 // Adiciona os repositórios genéricos e específicos
 builder.Services.AddScoped(typeof(InterfaceGeneric<>), typeof(RepositorioGeneric<>));
-builder.Services.AddScoped<InterfaceAdocao, RepositorioAdocao>();
 builder.Services.AddScoped<InterfaceAnuncioAnimal, RepositorioAnuncioAnimal>();
 builder.Services.AddScoped<InterfaceConversa, RepositorioConversa>();
 builder.Services.AddScoped<InterfaceMensagem, RepositorioMensagem>();
@@ -77,11 +102,11 @@ builder.Services.AddScoped<InterfaceUsuariosConversa, RepositorioUsuariosConvers
 
 var app = builder.Build();
 
-// Configuração do pipeline de requisições HTTP
+// Configuração para exibir o Swagger UI apenas em ambientes de desenvolvimento.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API de Usuários v1"));
 }
 
 // Habilita o middleware de CORS

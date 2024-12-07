@@ -7,11 +7,13 @@ using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Configuration;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace webApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [SwaggerTag("Controller responsável pela autenticação e geração de token JWT.")]
     public class AuthController : ControllerBase
     {
         private readonly UserManager<Usuario> _userManager;
@@ -26,24 +28,18 @@ namespace webApi.Controllers
         }
 
         /// <summary>
-        /// Cria um token JWT para autenticação do usuário entrar no sistema da clínica petz.
+        /// Realiza o login de um usuário e retorna um token JWT.
         /// </summary>
-        /// <remarks>
-        /// Exemplo de requisição:
-        /// 
-        ///     POST /api/CreateToken
-        ///     {
-        ///         "Email": "usuario@exemplo.com",
-        ///         "Password": "senha"
-        ///     }
-        ///     
-        /// O token gerado será retornado na resposta.
-        /// </remarks>
-        /// <param name="loginModel">Dados de login do usuário.</param>
-        /// <returns>O token JWT gerado se a autenticação for bem-sucedida.</returns>
-        /// <response code="200">Retorna o token JWT se a autenticação for bem-sucedida.</response>
-        /// <response code="401">Retorna não autorizado se a autenticação falhar.</response>
+        /// <param name="model">Modelo de solicitação de login contendo o nome de usuário e a senha.</param>
+        /// <returns>Um token JWT caso as credenciais sejam válidas.</returns>
+        /// <response code="200">Retorna um token JWT.</response>
+        /// <response code="400">Se o nome de usuário ou a senha estiverem ausentes.</response>
+        /// <response code="401">Se as credenciais forem inválidas.</response>
         [HttpPost("Login")]
+        [SwaggerOperation(Summary = "Login de usuário", Description = "Realiza a autenticação do usuário e retorna um token JWT.")]
+        [SwaggerResponse(200, "Token JWT gerado com sucesso", typeof(object))]
+        [SwaggerResponse(400, "Requisição inválida - nome de usuário ou senha ausentes")]
+        [SwaggerResponse(401, "Credenciais inválidas")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
@@ -89,7 +85,14 @@ namespace webApi.Controllers
     // Modelo para a solicitação de login
     public class LoginModel
     {
+        /// <summary>
+        /// Nome de usuário para autenticação.
+        /// </summary>
         public string Username { get; set; }
+
+        /// <summary>
+        /// Senha do usuário para autenticação.
+        /// </summary>
         public string Password { get; set; }
     }
 }

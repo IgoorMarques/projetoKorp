@@ -8,8 +8,8 @@ namespace dominio.Interfaces.Generics
 {
     public interface InterfaceGeneric<T> where T : class
     {
-        Task Add(T Objeto);
-        Task Update(T Objeto);
+        Task<T> Add(T Objeto);
+        Task<T> Update(T Objeto);
         Task Delete(T Objeto);
         Task<T> GetEntityByID(int id);
         Task<List<T>> List();

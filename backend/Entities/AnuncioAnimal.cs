@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace Entities
 {
     public class AnuncioAnimal
     {
+        [Key]
         public int AnuncioId { get; set; }
         public string Titulo { get; set; } = null!;
         public string Descricao { get; set; } = null!;
@@ -16,7 +18,8 @@ namespace Entities
         public int Idade { get; set; }
         public string Especie { get; set; } = null!;
         public bool Adotado { get; set; } = false;
-        public int UsuarioId { get; set; }
-        public Usuario Usuario { get; set; } = null!;
+        public string AnuncianteId { get; set; }
+        public Usuario Anunciante { get; set; } = null!;
+        public ICollection<Midia> Midias { get; set; } = new List<Midia>();
     }
 }

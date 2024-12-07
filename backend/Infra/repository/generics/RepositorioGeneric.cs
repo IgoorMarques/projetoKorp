@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Infra.repository.generics
 {
@@ -16,12 +17,13 @@ namespace Infra.repository.generics
             _context = context;
         }
 
-        public async Task Add(T objeto)
+        public async Task<T> Add(T objeto)
         {
             try
             {
                 await _context.Set<T>().AddAsync(objeto);
                 await _context.SaveChangesAsync();
+                return objeto;
             }
             catch (Exception ex)
             {
@@ -49,9 +51,6 @@ namespace Infra.repository.generics
             try
             {
                 var result = await _context.Set<T>().FindAsync(id);
-                if (result == null)
-                    throw new KeyNotFoundException($"Entidade com ID {id} não encontrada.");
-
                 return result;
             }
             catch (Exception ex)
@@ -74,14 +73,15 @@ namespace Infra.repository.generics
             }
         }
 
-        public async Task Update(T objeto)
+        public async Task<T> Update(T objeto)
         {
             try
             {
                 if (!_context.Set<T>().Local.Contains(objeto))
-                    _context.Set<T>().Update(objeto);
+                   _context.Set<T>().Update(objeto);
 
                 await _context.SaveChangesAsync();
+                return objeto;
             }
             catch (Exception ex)
             {
