@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using webApi.Token;
 using Entities.Context;
+using Domain.Interfaces;
 
 
 
@@ -24,11 +25,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Configurar a string de conexão
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Adicionar o DbContext ao container de injeção de dependência
 builder.Services.AddDbContext<ContextBase>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
+
+// Adicionar repositórios genéricos e específicos ao container
+builder.Services.AddScoped(typeof(InterfaceGeneric<>), typeof(RepositorioGeneric<>));
 
 // INTERFACE E REPOSITORIO
-builder.Services.AddScoped(typeof(InterfaceGeneric<>), typeof(RepositorioGeneric<>));
+builder.Services.AddScoped<InterfaceAdocao, RepositorioAdocao>();
 
 // SERVIÇO DOMINIO
 
