@@ -6,6 +6,7 @@ namespace Entities.Context
     {
         public ContextBase(DbContextOptions<ContextBase> options) : base(options) { }
 
+        public DbSet<Usuario> Usuarios { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -18,7 +19,7 @@ namespace Entities.Context
 
         private string ObterStringConexao()
         {
-            return "Data Source=DESKTOP-4LE6SQB;Initial Catalog=Acaiteria;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+            return "Data Source=DESKTOP-4LE6SQB;Initial Catalog=SistemaAdocaoDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
