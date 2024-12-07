@@ -10,6 +10,5 @@ namespace Entities
     public class Usuario : IdentityUser
     {
         public string? ImagemPerfilUrl { get; set; }
-        public int teste { get; set; }
     }
 }
