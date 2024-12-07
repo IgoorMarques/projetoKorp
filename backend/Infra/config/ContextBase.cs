@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Entities.Context
 {
-    public class ContextBase : DbContext
+    public class ContextBase : IdentityDbContext<Usuario>
     {
         public ContextBase(DbContextOptions<ContextBase> options) : base(options) { }
-
-        public DbSet<Usuario> Usuarios { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

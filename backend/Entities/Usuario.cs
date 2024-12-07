@@ -9,6 +9,7 @@ namespace Entities
 {
     public class Usuario : IdentityUser
     {
+        public string Nome { get; set; }
         public string? ImagemPerfilUrl { get; set; }
     }
 }
