@@ -1,0 +1,33 @@
+<section class="detalhes-anuncio">
+  <h1>Gato de raça precisando de um lar</h1>
+  <span>Publicado em 03/12 às 21:01</span>
+
+  <mat-grid-list cols="6" rowHeight="100px" gutterSize="10px" class="grid-view">
+    @for (tile of tiles; track tile) {
+      <mat-grid-tile class="container-img"
+        [colspan]="tile.cols"
+        [rowspan]="tile.rows"
+        [style.background]="tile.color">{{tile.text}}
+      </mat-grid-tile>
+    }
+  </mat-grid-list>
+
+  <h1>Zebedeu</h1>
+  <p>
+    Brincalão, carismatico e caçador
+  </p>
+
+  <h1>Detalhes</h1>
+
+  <table mat-table [dataSource]="data" class="mat-elevation-z8">
+    @for (column of displayedColumns; track column) {
+      <ng-container [matColumnDef]="column">
+        <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+        <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+      </ng-container>
+    }
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+  </table>
+
+</section>

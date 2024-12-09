@@ -1,0 +1,24 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Pesquisar</mat-card-title>
+  </mat-card-header>
+  <form class="form-busca">
+    <div class="flex-container">
+      <mat-button-toggle-group aria-label="Tipo de passagem">
+        <mat-button-toggle checked>
+          <mat-icon>check</mat-icon>
+          Cachorro
+        </mat-button-toggle>
+        <mat-button-toggle>Gato</mat-button-toggle>
+      </mat-button-toggle-group>
+      <mat-chip-listbox aria-label="Seleção de passagens">
+        <mat-chip-option selected>Adulto</mat-chip-option>
+        <mat-chip-option>Filhote</mat-chip-option>
+      </mat-chip-listbox>
+      <mat-card-actions align="end">
+        <button mat-flat-button class="bt_pesquisar">Pesquisar</button>
+      </mat-card-actions>
+    </div>
+
+  </form>
+</mat-card>

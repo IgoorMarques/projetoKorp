@@ -1,0 +1,25 @@
+.criar-conta{
+  max-width: auto;
+  display: flex;
+  flex-direction: column;
+
+  .row{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .spacer{
+      margin: 0 10px;
+    }
+  }
+
+  .bt-criar-conta{
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+  }
+
+  .checked-box-margin{
+    margin-bottom: 10px;
+  }
+}

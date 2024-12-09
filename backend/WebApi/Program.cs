@@ -96,7 +96,6 @@ builder.Services.AddScoped<InterfaceAnuncioAnimal, RepositorioAnuncioAnimal>();
 builder.Services.AddScoped<InterfaceConversa, RepositorioConversa>();
 builder.Services.AddScoped<InterfaceMensagem, RepositorioMensagem>();
 builder.Services.AddScoped<InterfaceMidia, RepositorioMidia>();
-builder.Services.AddScoped<InterfaceUsuariosConversa, RepositorioUsuariosConversa>();
 
 // Adiciona serviços adicionais (exemplo)
 

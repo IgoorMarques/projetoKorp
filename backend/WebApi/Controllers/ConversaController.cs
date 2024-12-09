@@ -3,6 +3,7 @@ using Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using webApi.Controllers.ModelsDeEntradaDeDados;
 
 namespace webApi.Controllers
 {
@@ -13,34 +14,37 @@ namespace webApi.Controllers
     public class ConversaController : ControllerBase
     {
         private readonly InterfaceConversa _interfaceConversa;
-        private readonly InterfaceUsuariosConversa _interfaceUsuariosConversa;
+       
         private readonly InterfaceMensagem _interfaceMensagem;
+        private readonly UserManager<Usuario> _userManager;
 
 
-        public ConversaController(InterfaceConversa interfaceConversa, InterfaceMensagem interfaceMensagem, InterfaceUsuariosConversa interfaceUsuariosConversa)
+        public ConversaController(InterfaceConversa interfaceConversa, InterfaceMensagem interfaceMensagem, UserManager<Usuario> userManager)
         {
             _interfaceConversa = interfaceConversa;
             _interfaceMensagem = interfaceMensagem;
-            _interfaceUsuariosConversa = interfaceUsuariosConversa;
+            _userManager = userManager;
         }
 
 
         /// <summary>
         /// Cria uma nova conversa.
         /// </summary>
-        /// <param name="novaConversa">Objeto que contém as informações da conversa a ser criada.</param>
         /// <returns>Um status de sucesso ou falha com as mensagens apropriadas.</returns>
         [HttpPost]
         [SwaggerOperation(Summary = "Cria uma nova conversa", Description = "Cria uma nova conversa com as informações fornecidas.")]
         [SwaggerResponse(200, "Conversa criada com sucesso", typeof(Conversa))]
         [SwaggerResponse(400, "Dados da conversa inválidos ou erro na criação")]
         [SwaggerResponse(500, "Erro interno do servidor")]
-        public async Task<IActionResult> CreatConversa([FromQuery] string participante1Id, [FromQuery] string participante2Id)
+        public async Task<IActionResult> CreatConversa([FromBody] ConversaModel novaConversa)
         {
             try
             {
-                var result = await _interfaceConversa.Add(new Conversa());
-
+                Conversa result = await _interfaceConversa.Add(new Conversa
+                {
+                    Participante1Id = novaConversa.Participante1Id,
+                    Participante2Id = novaConversa.Participante2Id
+                });
                 return Ok(result);
             }
             catch (Exception ex)
@@ -149,5 +153,50 @@ namespace webApi.Controllers
                 return StatusCode(500, "Erro interno do servidor. Por favor, tente novamente mais tarde.");
             }
         }
+
+
+        /// <summary>
+        /// Enviar uma nova mensagem
+        /// </summary>
+        /// <param name="usuarioId">O ID do remetente da mensagem.</param>
+        /// <returns>Mensagem enviada com sucesso.</returns>
+        [HttpPost]
+        [Route("EnviarMensagem")]
+        [SwaggerOperation(Summary = "Enviar uma nova mensagem")]
+        [SwaggerResponse(200, "Mensagem enviada com sucesso")]
+        [SwaggerResponse(404, "Não encontrado para o id informado")]
+        [SwaggerResponse(500, "Erro interno do servidor")]
+        public async Task<IActionResult> EnviarMensagem([FromBody] MensagemModel novaMensagem)
+        {
+            Usuario? usuario = await _userManager.FindByIdAsync(novaMensagem.RemetenteId);
+            if (usuario == null)
+            {
+                return NotFound("Usuario não encontrado para o id informado");
+            }
+
+            Conversa conversa = await _interfaceConversa.GetEntityByID(novaMensagem.ConversaId);
+
+            if (conversa == null)
+            {
+                return NotFound("Conversa não encontrada para o id informado");
+            }
+
+            try
+            {
+                Mensagem createdNovaMensagem = await _interfaceMensagem.Add(new Mensagem { 
+                    RemetendeId = novaMensagem.RemetenteId,
+                    Conteudo = novaMensagem.Mensagem,
+                    ConversaId = novaMensagem.ConversaId
+                });
+                
+                return Ok(createdNovaMensagem);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Erro interno do servidor. Por favor, tente novamente mais tarde.");
+            }
+        }
+
+
     }
 }

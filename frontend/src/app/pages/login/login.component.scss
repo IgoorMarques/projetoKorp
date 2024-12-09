@@ -1,0 +1,56 @@
+.criar-conta {
+  display: flex;
+  align-items: center; /* Centraliza verticalmente */
+  justify-content: center; /* Centraliza horizontalmente */
+  height: 80vh; /* Ocupa toda a altura da viewport */
+
+  .card {
+    max-width: auto;
+
+    mat-card-content {
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+          max-height: 150px; /* Tamanho máximo da logo */
+          border-radius: 50%; /* Torna a imagem circular */
+          margin-right: 50px;
+        }
+
+        .column {
+          display: flex;
+          flex-direction: column; /* Organiza os elementos em uma coluna */
+          gap: 10px; /* Espaçamento uniforme entre os elementos */
+
+          mat-form-field {
+            width: 100%; /* Ocupa toda a largura disponível */
+            max-width: 400px; /* Define uma largura máxima para os campos */
+          }
+
+          .bt_login {
+            width: 100%;
+            background-color: black;
+            color: white;
+            border-radius: 6px;
+            padding: 25px;
+          }
+        }
+      }
+      .row-criar-conta {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .criar-conta {
+          color: black;
+          max-height: 30px;
+          text-decoration: underline;
+          text-decoration-color: black; /* Define a cor do sublinhado */
+        }
+      }
+    }
+  }
+}

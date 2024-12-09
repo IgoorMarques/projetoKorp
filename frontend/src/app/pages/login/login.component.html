@@ -1,0 +1,48 @@
+<section class="criar-conta">
+  <div class="card">
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <div class="row">
+          <img src="assets/imagens/logo.jpeg" alt="">
+          <div class="column">
+              <h1>Login</h1>
+              <mat-form-field appearance="outline">
+                <mat-label>Informe seu email</mat-label>
+                <input
+                  matInput
+                  placeholder="pat@example.com"
+                  [formControl]="email"
+                  (blur)="updateErrorMessage()"
+                  required
+                />
+                @if (email.invalid) {
+                  <mat-error>{{errorMessage()}}</mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Informe sua senha</mat-label>
+                <input matInput [type]="hide() ? 'password' : 'text'" />
+                <button
+                  mat-icon-button
+                  matSuffix
+                  (click)="clickEvent($event)"
+                  [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hide()"
+                >
+                  <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </mat-form-field>
+              <button mat-raised-button class="bt_login">Acessar minha conta</button>
+          </div>
+        </div>
+        <div class="row-criar-conta">
+          <span>Ainda não possui conta?</span>
+          <button mat-button class="criar-conta">Clique aqui para criar sua conta</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>
+
+
+

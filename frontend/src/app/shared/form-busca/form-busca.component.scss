@@ -1,0 +1,22 @@
+mat-card{
+  margin-bottom: 20px;
+  .form-busca {
+    margin: 0 auto;
+    .flex-container {
+      display: flex;
+      align-items: center;
+      gap: 50px;
+      margin: 5px auto;
+    }
+    .mat-button-toggle-checked {
+      background-color: #F7F2FA;
+   }
+   .bt_pesquisar{
+    background-color: black;
+    color: white;
+    border-radius: 6px;
+   }
+  }
+}
+
+

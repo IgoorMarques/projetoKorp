@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Entities
@@ -16,6 +17,9 @@ namespace Entities
         public bool StatusLeitura { get; set; }
         public int ConversaId { get; set; }
         public string RemetendeId { get; set; }
+
+
+        [JsonIgnore]
         public Conversa Conversa { get; set; }
         public Usuario Remetente { get; set; }
     }

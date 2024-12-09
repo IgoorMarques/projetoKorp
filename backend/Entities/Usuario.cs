@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Entities
@@ -11,8 +12,12 @@ namespace Entities
     {
         public string Nome { get; set; }
         public string? ImagemPerfilUrl { get; set; }
-        public ICollection<UsuariosConversa> ParticipacaoEmConversas { get; } =  new List<UsuariosConversa>();
-        public ICollection<Mensagem> MensagensEnviadas { get; } =  new List<Mensagem       >();
+
+        [JsonIgnore]
+        public ICollection<Conversa> ConversasComoParticipante1 { get; set; } = new List<Conversa>();
+
+        [JsonIgnore]
+        public ICollection<Conversa> ConversasComoParticipante2 { get; set; } = new List<Conversa>();
         public ICollection<AnuncioAnimal> Anuncios { get; } =  new List<AnuncioAnimal>();
     }
 }

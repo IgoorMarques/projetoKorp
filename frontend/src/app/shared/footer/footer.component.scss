@@ -1,0 +1,36 @@
+.app-footer {
+  background-color: black;
+  color: white;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  .inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .row {
+      display: flex; // Define um contêiner flexível
+      align-items: center; // Alinha verticalmente ao centro
+      gap: 5px; // Adiciona um espaço entre a imagem e o texto
+
+      img {
+        max-width: 50px; // Ajuste o tamanho máximo da imagem conforme necessário
+        height: auto; // Garante que a altura seja proporcional à largura da imagem
+      }
+      span {
+        font-size: 1.5rem; // Ajuste o tamanho da fonte conforme necessário
+
+      }
+    }
+
+    ul {
+      padding: 0;
+      list-style: none;
+      &.socials {
+        li {
+          text-align: center;
+        }
+      }
+    }
+  }
+}

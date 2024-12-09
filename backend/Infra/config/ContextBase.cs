@@ -10,7 +10,6 @@ namespace Entities.Context
         public DbSet<Conversa> Conversas { get; set; }
         public DbSet<Mensagem> Mensagens { get; set; }
         public DbSet<Midia> Midias { get; set; }
-        public DbSet<UsuariosConversa> UsuariosConversas { get; set; }
 
 
 
@@ -31,42 +30,46 @@ namespace Entities.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<UsuariosConversa>()
-                .HasOne(uc => uc.Conversa)
-                .WithMany(c => c.ParticipantesConversa)
-                .HasForeignKey(uc => uc.ConversaId);
+            // Propriedade default para DataHoraCriacao
+            modelBuilder.Entity<Conversa>()
+                .Property(c => c.DataHoraCriacao)
+                .HasDefaultValueSql("GETUTCDATE()");
 
-            modelBuilder.Entity<UsuariosConversa>()
-                .HasOne(uc => uc.Participante1)
-                .WithMany()
-                .HasForeignKey(uc => uc.Participante1Id)
+            // Relacionamento entre Participante1 e Conversa
+            modelBuilder.Entity<Conversa>()
+                .HasOne(c => c.Participante1)
+                .WithMany(u => u.ConversasComoParticipante1)
+                .HasForeignKey(c => c.Participante1Id)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<UsuariosConversa>()
-                .HasOne(uc => uc.Participante2)
-                .WithMany()
-                .HasForeignKey(uc => uc.Participante2Id)
+            // Relacionamento entre Participante2 e Conversa
+            modelBuilder.Entity<Conversa>()
+                .HasOne(c => c.Participante2)
+                .WithMany(u => u.ConversasComoParticipante2)
+                .HasForeignKey(c => c.Participante2Id)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
+            // Relacionamento entre Conversa e Mensagem
             modelBuilder.Entity<Conversa>()
-               .Property(c => c.DataHoraCriacao)
-               .HasDefaultValueSql("GETUTCDATE()");
-               
+                .HasMany(c => c.Mensagens)
+                .WithOne(m => m.Conversa)
+                .HasForeignKey(m => m.ConversaId)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            // Relacionamento para Mensagem (DataHoraEnvio e StatusLeitura)
+            modelBuilder.Entity<Mensagem>()
+                .Property(m => m.DataHoraEnvio)
+                .HasDefaultValueSql("GETUTCDATE()");
 
-            modelBuilder.Entity<Conversa>()
-              .HasMany(C => C.ParticipantesConversa)
-              .WithOne(UC => UC.Conversa)
-              .HasForeignKey(UC => UC.ConversaId)
-              .IsRequired();
+            modelBuilder.Entity<Mensagem>()
+                .Property(m => m.StatusLeitura)
+                .IsRequired()
+                .HasDefaultValue(true);
 
-            modelBuilder.Entity<Conversa>()
-               .HasMany(M => M.Mensagens)
-               .WithOne(C => C.Conversa)
-               .HasForeignKey(C => C.ConversaId)
-               .IsRequired()
-               .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Mensagem>()
+                .HasOne(u => u.Remetente)
+                .WithMany()
+                .HasForeignKey(m => m.RemetendeId);
 
 
             modelBuilder.Entity<AnuncioAnimal>()

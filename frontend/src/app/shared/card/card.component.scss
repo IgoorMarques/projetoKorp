@@ -1,0 +1,15 @@
+.card{
+  max-width: 250px;
+  mat-card{
+    mat-card-actions{
+      .bt_saber_mais{
+        width: 100%;
+        margin: 0 0;
+        padding: 0 0;
+         background-color: black;
+         color: white;
+         border-radius: 3px;
+       }
+    }
+  }
+}
