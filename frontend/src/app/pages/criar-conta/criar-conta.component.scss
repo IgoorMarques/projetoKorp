@@ -1,25 +1,59 @@
-.criar-conta{
-  max-width: auto;
-  display: flex;
-  flex-direction: column;
-
-  .row{
+.criar-conta {
+  form {
+    max-width: auto;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
 
-    .spacer{
-      margin: 0 10px;
+    .error-messages {
+      color: red;
+      font-size: 12px;
+      margin-bottom: 5px;
+      line-height: 1.5;
     }
-  }
 
-  .bt-criar-conta{
-    background-color: black;
-    color: white;
-    border-radius: 5px;
-  }
+    .form-field {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
 
-  .checked-box-margin{
-    margin-bottom: 10px;
+      mat-form-field {
+        width: 100%; // Garante que o campo ocupe todo o espaço disponível
+      }
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .spacer {
+        margin: 0 10px;
+      }
+    }
+
+    .colunm{
+      max-width: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bt-criar-conta {
+      background-color: black;
+      color: white;
+      border-radius: 5px;
+      margin-top: 20px;
+      padding: 10px 15px;
+      font-size: 16px;
+      text-transform: uppercase;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #333;
+      }
+    }
+
+    .checked-box-margin {
+      margin-bottom: 10px;
+    }
   }
 }

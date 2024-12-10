@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Entities
@@ -19,6 +20,7 @@ namespace Entities
         public string Especie { get; set; } = null!;
         public bool Adotado { get; set; } = false;
         public string AnuncianteId { get; set; }
+        [JsonIgnore]
         public Usuario Anunciante { get; set; } = null!;
         public ICollection<Midia> Midias { get; set; } = new List<Midia>();
     }

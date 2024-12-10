@@ -17,5 +17,7 @@ namespace webApi.Controllers.ModelsDeEntradaDeDados
         public string Especie { get; set; } = null!;
         [Required]
         public string AnuncianteId { get; set; }
+
+        public List<IFormFile> Imagens { get; set; } = new List<IFormFile>();
     }
 }

@@ -18,6 +18,7 @@ namespace Entities
 
         [JsonIgnore]
         public ICollection<Conversa> ConversasComoParticipante2 { get; set; } = new List<Conversa>();
+        [JsonIgnore]
         public ICollection<AnuncioAnimal> Anuncios { get; } =  new List<AnuncioAnimal>();
     }
 }

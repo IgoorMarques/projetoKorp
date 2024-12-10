@@ -1,7 +1,9 @@
 ﻿using Domain.Interfaces;
+using Domain.Servicos;
 using Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
 using webApi.Controllers.ModelsDeEntradaDeDados;
 
@@ -14,32 +16,38 @@ namespace webApi.Controllers
     {
         private readonly InterfaceAnuncioAnimal _interfaceAnuncioAnimal;
         private readonly UserManager<Usuario> _userManager;
-        public AnuncioAnimalController(InterfaceAnuncioAnimal interfaceAnuncioAnimal, UserManager<Usuario> userManager)
+        private readonly S3Service _s3Service;
+        private readonly InterfaceMidia _interfaceMidia;
+        public AnuncioAnimalController(InterfaceAnuncioAnimal interfaceAnuncioAnimal, UserManager<Usuario> userManager, S3Service s3Service, InterfaceMidia interfaceMidia)
         {
             _interfaceAnuncioAnimal = interfaceAnuncioAnimal;
             _userManager = userManager;
+            _s3Service = s3Service;
+            _interfaceMidia = interfaceMidia;
 
         }
 
         /// <summary>
-        /// Cria um novo usuário.
+        /// Cria um novo anúncio.
         /// </summary>
-        /// <param name="usuario">Objeto que contém as informações do usuário a ser criado.</param>
+        /// <param name="anuncio">Objeto que contém as informações do anúncio a ser criado.</param>
         /// <returns>Um status de sucesso ou falha com as mensagens apropriadas.</returns>
         [HttpPost]
-        [SwaggerOperation(Summary = "Cria um novo usuário")]
-        [SwaggerResponse(200, "Usuário criado com sucesso")]
-        [SwaggerResponse(400, "Dados do usuário inválidos ou erro na criação")]
-        public async Task<IActionResult> CreateAnuncio([FromBody] AnuncioModel anuncio)
+        [SwaggerOperation(Summary = "Cria um novo anúncio")]
+        [SwaggerResponse(201, "Anúncio criado com sucesso")]
+        [SwaggerResponse(400, "Dados do anúncio inválidos ou erro na criação")]
+        public async Task<IActionResult> CreateAnuncio([FromForm] AnuncioModel anuncio)
         {
             var usuario = await _userManager.FindByIdAsync(anuncio.AnuncianteId);
             if (usuario == null)
             {
                 return BadRequest("Dados do usuário inválidos");
             }
+
             try
             {
-                AnuncioAnimal novoAnuncio = new AnuncioAnimal { 
+                AnuncioAnimal novoAnuncio = new AnuncioAnimal
+                {
                     Titulo = anuncio.Titulo,
                     Descricao = anuncio.Descricao,
                     NomeAnimal = anuncio.NomeAnimal,
@@ -47,15 +55,48 @@ namespace webApi.Controllers
                     Tamanho = anuncio.Tamanho,
                     Idade = anuncio.Idade,
                     AnuncianteId = anuncio.AnuncianteId,
+                    Midias = new List<Midia>()
                 };
 
                 var result = await _interfaceAnuncioAnimal.Add(novoAnuncio);
+                var midias = new List<Midia>();
+                if (anuncio.Imagens != null && anuncio.Imagens.Count > 0)
+                {
+                    for (int i = 0; i < anuncio.Imagens.Count; i++)
+                    {
+                        var imagem = anuncio.Imagens[i];
+                        if (imagem.Length > 0)
+                        {
+                            using (var stream = imagem.OpenReadStream())
+                            {
+                                var keyName = $"anuncios/{result.AnuncioId}/list-images/{imagem.FileName}";
+                                var imageUrl = await _s3Service.UploadImageAsync(stream, keyName, imagem.ContentType);
+                                if (imageUrl != null)
+                                {
+                                    Midia img = new Midia
+                                    {
+                                        UrlMidia = imageUrl,
+                                        AnuncioAnimalId = result.AnuncioId,
+                                        Ordem = i + 1,
+                                        Tipo = "img"
+                                    };
+                                    await _interfaceMidia.Add(img);
+                                    midias.Add(img);
+                                }
+                            }
+                        }
+                    }
+                }
+                result.Midias = midias;
                 return Ok(result);
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                return BadRequest();
-            } 
+                // Log da exceção pode ser adicionado aqui
+                return BadRequest(ex);
+            }
         }
+
 
         /// <summary>
         /// Lista todos os anuncios cadastrados.
@@ -66,8 +107,8 @@ namespace webApi.Controllers
         [SwaggerResponse(200, "Lista de anuncios retornada com sucesso")]
         public async Task<IActionResult> ListAnuncios()
         {
-            var anuncios = await _interfaceAnuncioAnimal.List();
-            return Ok(await Task.FromResult(anuncios));
+            var anuncios = await _interfaceAnuncioAnimal.GetAnuncios();
+            return Ok(anuncios);
         }
 
         /// <summary>
@@ -82,7 +123,7 @@ namespace webApi.Controllers
         [SwaggerResponse(404, "Usuário não encontrado")]
         public async Task<IActionResult> GetAnuncio(int id)
         {
-            var anuncio = await _interfaceAnuncioAnimal.GetEntityByID(id);
+            var anuncio = await _interfaceAnuncioAnimal.GetAnuncioById(id);
             if (anuncio == null)
             {
                 return NotFound();

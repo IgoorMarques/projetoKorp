@@ -1,5 +1,6 @@
 <section class="criar-conta">
-  <div class="card">
+  <form [formGroup]="loginForm" (submit)="logar()">
+    <div class="card">
     <mat-card appearance="outlined">
       <mat-card-content>
         <div class="row">
@@ -10,18 +11,12 @@
                 <mat-label>Informe seu email</mat-label>
                 <input
                   matInput
-                  placeholder="pat@example.com"
-                  [formControl]="email"
-                  (blur)="updateErrorMessage()"
-                  required
+                  formControlName="email"
                 />
-                @if (email.invalid) {
-                  <mat-error>{{errorMessage()}}</mat-error>
-                }
               </mat-form-field>
               <mat-form-field appearance="outline">
                 <mat-label>Informe sua senha</mat-label>
-                <input matInput [type]="hide() ? 'password' : 'text'" />
+                <input matInput [type]="hide() ? 'password' : 'text'"   formControlName="senha" />
                 <button
                   mat-icon-button
                   matSuffix
@@ -37,11 +32,13 @@
         </div>
         <div class="row-criar-conta">
           <span>Ainda não possui conta?</span>
-          <button mat-button class="criar-conta">Clique aqui para criar sua conta</button>
+          <button mat-button class="criar-conta"  routerLink="/create-account">Clique aqui para criar sua conta</button>
         </div>
       </mat-card-content>
     </mat-card>
   </div>
+  </form>
+
 </section>
 
 

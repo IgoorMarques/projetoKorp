@@ -18,11 +18,16 @@ using System.Text;
 using Entities;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Amazon.Runtime;
+using Amazon.S3;
+using Domain.Servicos;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adiciona suporte a controllers e views (para API, é mais comum usar apenas Controllers)
 builder.Services.AddControllers();
+
+
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -97,7 +102,22 @@ builder.Services.AddScoped<InterfaceConversa, RepositorioConversa>();
 builder.Services.AddScoped<InterfaceMensagem, RepositorioMensagem>();
 builder.Services.AddScoped<InterfaceMidia, RepositorioMidia>();
 
-// Adiciona serviços adicionais (exemplo)
+
+// Carregar credenciais AWS do appsettings.json
+builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+var awsOptions = builder.Configuration.GetAWSOptions();
+awsOptions.Credentials = new BasicAWSCredentials(
+    builder.Configuration["AWS:AccessKey"],
+    builder.Configuration["AWS:SecretKey"]
+);
+
+// Adicionar serviços ao contêiner
+builder.Services.AddDefaultAWSOptions(awsOptions);
+
+// S3
+builder.Services.AddAWSService<IAmazonS3>();
+builder.Services.AddSingleton<S3Service>();
 
 var app = builder.Build();
 

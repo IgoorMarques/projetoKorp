@@ -2,56 +2,115 @@
 
   <h1>Crie sua conta</h1>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Seu nome vem aqui</mat-label>
-    <input matInput placeholder="Seu nome">
-  </mat-form-field>
-
-  <div class="row">
+  <form [formGroup]="novoUsuarioFormGroup" (submit)="cadastrar()">
     <mat-form-field appearance="outline">
-      <mat-label>Informe seu email</mat-label>
-      <input
-        matInput
-        placeholder="pat@example.com"
-        [formControl]="email"
-        (blur)="updateErrorMessage()"
-        required
-      />
-      @if (email.invalid) {
-        <mat-error>{{errorMessage()}}</mat-error>
-      }
+      <mat-label>Seu nome vem aqui</mat-label>
+      <input matInput placeholder="Seu nome" formControlName="nome">
     </mat-form-field>
-    <div class="spacer"></div>
-    <mat-form-field appearance="outline">
-      <mat-label>Confirme seu email</mat-label>
-      <input
-        matInput
-        placeholder="pat@example.com"
-        [formControl]="email"
-        (blur)="updateErrorMessage()"
-        required
-      />
-      @if (email.invalid) {
-        <mat-error>{{errorMessage()}}</mat-error>
-      }
-    </mat-form-field>
-  </div>
 
-  <div class="row">
-    <mat-form-field appearance="outline">
-      <mat-label>Informe sua senha</mat-label>
-      <input matInput [type]="hide() ? 'password' : 'text'" />
-    </mat-form-field>
-    <div class="spacer"></div>
-    <mat-form-field appearance="outline">
-      <mat-label>Confirme sua senha</mat-label>
-      <input matInput [type]="hide() ? 'password' : 'text'" />
-    </mat-form-field>
-  </div>
+    <div class="error-messages">
+      <span *ngIf="novoUsuarioFormGroup.get('nome')?.errors?.['required'] && novoUsuarioFormGroup.get('nome')?.touched">
+        O nome é obrigatório.
+      </span>
+      <span *ngIf="novoUsuarioFormGroup.get('nome')?.errors?.['minlength'] && novoUsuarioFormGroup.get('nome')?.touched">
+        O tamanho mínimo para o campo nome é 5 caracteres.
+      </span>
+    </div>
+    <div class="row">
+      <div class="colunm">
+        <mat-form-field appearance="outline">
+          <mat-label>Informe seu email</mat-label>
+          <input
+            matInput
+            placeholder="pat@example.com"
+            formControlName = "email"
+          />
+        </mat-form-field>
+        <div class="error-messages">
+          <span *ngIf="novoUsuarioFormGroup.get('email')?.errors?.['required'] && novoUsuarioFormGroup.get('email')?.touched">
+            O email é obrigatório.
+          </span>
+          <span *ngIf="novoUsuarioFormGroup.get('email')?.errors?.['email'] && novoUsuarioFormGroup.get('email')?.touched">
+            Formato inválido
+          </span>
+          <span *ngIf="novoUsuarioFormGroup.get('confirmEmail')?.value !== novoUsuarioFormGroup.get('email')?.value && novoUsuarioFormGroup.get('confirmEmail')?.touched">
+            Os emails não correspodem
+          </span>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="colunm">
+        <mat-form-field appearance="outline">
+          <mat-label>Confirme seu email</mat-label>
+          <input
+            matInput
+            placeholder="pat@example.com"
+            formControlName = "confirmEmail"
+          />
+        </mat-form-field>
+        <div class="error-messages">
+          <span *ngIf="novoUsuarioFormGroup.get('confirmEmail')?.errors?.['required'] && novoUsuarioFormGroup.get('confirmEmail')?.touched">
+            O email é obrigatório.
+          </span>
+          <span *ngIf="novoUsuarioFormGroup.get('confirmEmail')?.errors?.['email'] && novoUsuarioFormGroup.get('confirmEmail')?.touched">
+            Formato inválido
+          </span>
+          <span *ngIf="novoUsuarioFormGroup.get('confirmEmail')?.value !== novoUsuarioFormGroup.get('email')?.value && novoUsuarioFormGroup.get('confirmEmail')?.touched">
+            Os emails não correspodem
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="colunm">
+        <mat-form-field appearance="outline">
+          <mat-label>Informe sua senha</mat-label>
+          <input
+            matInput [type]="true ? 'password' : 'text'"
+            formControlName = 'senha'
+          />
+        </mat-form-field>
 
-  <mat-checkbox class="checked-box-margin">Li e aceite os termos e condições deste cadastro</mat-checkbox>
+        <div class="error-messages">
+          <span *ngIf="novoUsuarioFormGroup.get('senha')?.errors?.['required'] && novoUsuarioFormGroup.get('senha')?.touched">
+            A senha é obrigatoria
+          </span>
 
-  <button mat-raised-button class="bt-criar-conta">Criar minha conta</button>
+          <span *ngIf="novoUsuarioFormGroup.get('senha')?.errors?.['minlength'] && novoUsuarioFormGroup.get('senha')?.touched">
+            A senha precisa ter 5 caracteres
+          </span>
+
+          <span *ngIf="novoUsuarioFormGroup.get('confirSenha')?.value !== novoUsuarioFormGroup.get('senha')?.value && novoUsuarioFormGroup.get('senha')?.touched">
+            As senhas não correspodem
+          </span>
+        </div>
+      </div>
+      <div class="spacer"></div>
+
+      <div class="colunm">
+        <mat-form-field appearance="outline">
+          <mat-label>Confirme sua senha</mat-label>
+          <input matInput [type]="true ? 'password' : 'text'"   formControlName = 'confirSenha'/>
+        </mat-form-field>
+
+        <div class="error-messages">
+          <span *ngIf="novoUsuarioFormGroup.get('confirSenha')?.errors?.['required'] && novoUsuarioFormGroup.get('confirSenha')?.touched">
+            A senha é obrigatoria
+          </span>
+
+          <span *ngIf="novoUsuarioFormGroup.get('confirSenha')?.value !== novoUsuarioFormGroup.get('senha')?.value && novoUsuarioFormGroup.get('senha')?.touched">
+            As senhas não correspodem
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <mat-checkbox class="checked-box-margin">Li e aceite os termos e condições deste cadastro</mat-checkbox>
+
+    <button mat-raised-button class="bt-criar-conta">Criar minha conta</button>
+
+  </form>
+
 
 
 </section>

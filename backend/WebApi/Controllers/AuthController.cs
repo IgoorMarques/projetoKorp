@@ -55,7 +55,7 @@ namespace webApi.Controllers
 
             var token = GenerateJwtToken(user);
 
-            return Ok(new { Token = token });
+            return Ok(new { token });
         }
 
         private string GenerateJwtToken(Usuario user)

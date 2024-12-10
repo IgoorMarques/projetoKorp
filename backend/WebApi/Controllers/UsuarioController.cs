@@ -29,7 +29,7 @@ namespace webApi.Controllers
         {
             if (usuario == null)
             {
-                return BadRequest("Dados do usuário inválidos");
+                return BadRequest();
             }
 
             Usuario novoUsuario = new Usuario
@@ -42,7 +42,7 @@ namespace webApi.Controllers
             var result = await _userManager.CreateAsync(novoUsuario, usuario.Senha);
             if (result.Succeeded)
             {
-                return Ok("Usuário criado com sucesso");
+                return Ok();
             }
 
             return BadRequest(result.Errors);
@@ -97,7 +97,7 @@ namespace webApi.Controllers
         {
             if (usuarioModel == null)
             {
-                return BadRequest("Dados do usuário inválidos");
+                return BadRequest();
             }
 
             var usuario = await _userManager.FindByIdAsync(usuarioId);
@@ -113,7 +113,7 @@ namespace webApi.Controllers
 
             if (result.Succeeded)
             {
-                return Ok("Usuário atualizado com sucesso");
+                return Ok();
             }
 
             return BadRequest(result.Errors);
@@ -142,7 +142,7 @@ namespace webApi.Controllers
 
             if (result.Succeeded)
             {
-                return Ok("Usuário deletado com sucesso");
+                return Ok();
             }
 
             return BadRequest(result.Errors);

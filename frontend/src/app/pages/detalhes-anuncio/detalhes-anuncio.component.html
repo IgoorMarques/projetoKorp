@@ -2,22 +2,34 @@
   <h1>Gato de raça precisando de um lar</h1>
   <span>Publicado em 03/12 às 21:01</span>
 
-  <mat-grid-list cols="6" rowHeight="100px" gutterSize="10px" class="grid-view">
-    @for (tile of tiles; track tile) {
-      <mat-grid-tile class="container-img"
-        [colspan]="tile.cols"
-        [rowspan]="tile.rows"
-        [style.background]="tile.color">{{tile.text}}
-      </mat-grid-tile>
-    }
-  </mat-grid-list>
+  <div class="content-wrapper">
+    <!-- Grid layout -->
+    <mat-grid-list cols="6" rowHeight="100px" gutterSize="10px" class="grid-view">
+      @for (tile of tiles; track tile) {
+        <mat-grid-tile class="container-img"
+          [colspan]="tile.cols"
+          [rowspan]="tile.rows"
+          [style.background]="tile.color">
+          <img mat-card-image [src]="tile.text" alt="Photo of a Shiba Inu">
+        </mat-grid-tile>
+      }
+    </mat-grid-list>
 
-  <h1>Zebedeu</h1>
-  <p>
-    Brincalão, carismatico e caçador
+    <!-- Perfil do anunciante -->
+    <div class="perfil-anunciante">
+      <h2>Anunciante</h2>
+      <p><strong>Nome:</strong> Igor M</p>
+      <button mat-raised-button color="primary" (click)="abrirChat()">
+        Iniciar Conversa
+      </button>
+    </div>
+  </div>
+  <h1>Detalhes do animal</h1>
+
+  <h1 *ngIf="anuncio">{{anuncio.nomeAnimal}}</h1>
+  <p *ngIf="anuncio">
+    {{anuncio.descricao}}
   </p>
-
-  <h1>Detalhes</h1>
 
   <table mat-table [dataSource]="data" class="mat-elevation-z8">
     @for (column of displayedColumns; track column) {
@@ -30,4 +42,19 @@
     <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
   </table>
 
+    <!-- Chat (inicialmente oculto) -->
+    <div *ngIf="chatAberto" class="chat-popup">
+      <div class="chat-header">
+        <h3>Chat com Igor</h3>
+        <button (click)="fecharChat()">X</button>
+      </div>
+      <div class="chat-messages">
+        <!-- Mensagens do chat -->
+        <div *ngFor="let mensagem of mensagens" class="message">
+          <span>{{mensagem.texto}}</span>
+        </div>
+      </div>
+      <input [(ngModel)]="novaMensagem" placeholder="Digite uma mensagem..." (keydown.enter)="enviarMensagem()"/>
+      <button (click)="enviarMensagem()">Enviar</button>
+    </div>
 </section>
