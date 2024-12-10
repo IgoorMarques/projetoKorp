@@ -45,7 +45,7 @@ namespace webApi.Controllers
                 return Ok();
             }
 
-            return BadRequest(result.Errors);
+            return BadRequest(new {message = result.Errors });
         }
 
         /// <summary>

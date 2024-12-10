@@ -1,0 +1,21 @@
+.logo-site {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.logo-site img {
+  width: 50px;
+  height: auto;
+}
+
+.logo-site span {
+  font-size: 24px;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.logo-site:hover span {
+  color: #ff6600;
+}

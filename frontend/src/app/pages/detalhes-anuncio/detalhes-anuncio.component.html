@@ -1,21 +1,19 @@
-<section class="detalhes-anuncio">
+<section class="detalhes-anuncio" *ngIf="anuncio">
   <h1>Gato de raça precisando de um lar</h1>
   <span>Publicado em 03/12 às 21:01</span>
 
   <div class="content-wrapper">
-    <!-- Grid layout -->
-    <mat-grid-list cols="6" rowHeight="100px" gutterSize="10px" class="grid-view">
-      @for (tile of tiles; track tile) {
-        <mat-grid-tile class="container-img"
-          [colspan]="tile.cols"
-          [rowspan]="tile.rows"
-          [style.background]="tile.color">
-          <img mat-card-image [src]="tile.text" alt="Photo of a Shiba Inu">
-        </mat-grid-tile>
-      }
-    </mat-grid-list>
-
-    <!-- Perfil do anunciante -->
+    <div class="container" *ngIf="anuncio">
+      <div class="main-image">
+        <img [src]="imgPrincipal" alt="Paw print">
+      </div>
+      <div class="sidebar" *ngIf="anuncio.midias.length>0">
+        <div class="image-box" *ngFor="let image of anuncio.midias; let i = index "
+          (click)="selecionarImagem(i)">
+          <img [src]="image.urlMidia" alt="Photo of an animal" [class.selected]="i === indexImgSelecionada">
+        </div>
+      </div>
+    </div>
     <div class="perfil-anunciante">
       <h2>Anunciante</h2>
       <p><strong>Nome:</strong> Igor M</p>
@@ -25,33 +23,32 @@
     </div>
   </div>
   <h1>Detalhes do animal</h1>
-
-  <h1 *ngIf="anuncio">{{anuncio.nomeAnimal}}</h1>
-  <p *ngIf="anuncio">
+  {{anuncio.nomeAnimal}}
+  <p>
     {{anuncio.descricao}}
   </p>
-
-  <table mat-table [dataSource]="data" class="mat-elevation-z8">
-    @for (column of displayedColumns; track column) {
-      <ng-container [matColumnDef]="column">
-        <th mat-header-cell *matHeaderCellDef> {{column}} </th>
-        <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
-      </ng-container>
-    }
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
-  </table>
-
-    <!-- Chat (inicialmente oculto) -->
+  <div class="detalhes-animal">
+    <div class="colunm">
+      <h1>Especie</h1>
+      <span>{{anuncio.especie}}</span>
+    </div>
+    <div class="colunm">
+      <h1>Tamanho</h1>
+      <span>{{anuncio.tamanho}}</span>
+    </div>
+    <div class="colunm">
+      <h1>Idade</h1>
+      <span>{{anuncio.idade}}</span>
+    </div>
+  </div>
     <div *ngIf="chatAberto" class="chat-popup">
       <div class="chat-header">
         <h3>Chat com Igor</h3>
         <button (click)="fecharChat()">X</button>
       </div>
       <div class="chat-messages">
-        <!-- Mensagens do chat -->
         <div *ngFor="let mensagem of mensagens" class="message">
-          <span>{{mensagem.texto}}</span>
+          <span>{{mensagem}}</span>
         </div>
       </div>
       <input [(ngModel)]="novaMensagem" placeholder="Digite uma mensagem..." (keydown.enter)="enviarMensagem()"/>

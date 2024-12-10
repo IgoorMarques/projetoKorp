@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
-import { Anuncio } from '../../core/services/adocao/adocao';
+import { Anuncio } from '../../core/services/adocao/models/adocao';
 import { Router } from '@angular/router';
 
 @Component({

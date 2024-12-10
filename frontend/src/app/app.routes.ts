@@ -3,6 +3,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { CriarContaComponent } from './pages/criar-conta/criar-conta.component';
 import { DetalhesAnuncioComponent } from './pages/detalhes-anuncio/detalhes-anuncio.component';
 import { HomeComponent } from './pages/home/home.component';
+import { CriarAnuncioComponent } from './pages/anuncio/criar-anuncio/criar-anuncio.component';
 
 export const routes: Routes = [
   {
@@ -20,5 +21,9 @@ export const routes: Routes = [
   {
     path: 'details',
     component: DetalhesAnuncioComponent
+  },
+  {
+    path: 'create-anuncio',
+    component: CriarAnuncioComponent
   }
 ];

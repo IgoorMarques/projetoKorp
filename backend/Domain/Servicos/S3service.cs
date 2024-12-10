@@ -11,7 +11,7 @@ namespace Domain.Servicos
 {
     public class S3Service
     {
-        private readonly string _bucketName = "bucket-coruja";
+        private readonly string _bucketName = "sistemaadocaobucket";
         private readonly IAmazonS3 _s3Client;
 
         public S3Service(IAmazonS3 s3Client)

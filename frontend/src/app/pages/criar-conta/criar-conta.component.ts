@@ -64,9 +64,15 @@ export class CriarContaComponent  implements OnInit {
           }).then(() => {
           this.router.navigate(['login'])
         })
+      },(error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro ao criar conta',
+          text: error.error.message || 'Falha no servidor, tente novamente mais tarde.',
+          showConfirmButton: true,
+        });
       })
-
-    }
   }
+}
 
 }

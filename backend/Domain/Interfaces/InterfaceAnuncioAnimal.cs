@@ -12,6 +12,6 @@ namespace Domain.Interfaces
     public interface InterfaceAnuncioAnimal : InterfaceGeneric<AnuncioAnimal>
     {
         Task<IEnumerable<AnuncioAnimal>> GetAnuncios();
-        Task<IEnumerable<AnuncioAnimal>> GetAnuncioById(int anuncioId);
+        Task<AnuncioAnimal> GetAnuncioById(int anuncioId);
     }
 }

@@ -15,9 +15,10 @@ import Swal from 'sweetalert2';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
-  hide = signal(true);
   loginForm!: FormGroup;
   errorMessage = signal('');
+
+  mostrarSenha: boolean = false;
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router) {}
   ngOnInit(): void {
@@ -27,9 +28,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  clickEvent(event: MouseEvent) {
-    this.hide.set(!this.hide());
-    event.stopPropagation();
+  alterMostrarSenha(){
+    this.mostrarSenha = !this.mostrarSenha;
   }
 
   logar(){
@@ -52,6 +52,14 @@ export class LoginComponent implements OnInit {
           }).then(() => {
           this.router.navigate([''])
         })
+
+      }, (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro ao realizar login',
+          text: error.error.message || 'Verifique suas credenciais e tente novamente.',
+          showConfirmButton: true,
+        });
       })
 
     }

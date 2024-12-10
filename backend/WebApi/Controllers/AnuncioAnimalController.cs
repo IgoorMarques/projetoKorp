@@ -59,6 +59,7 @@ namespace webApi.Controllers
                 };
 
                 var result = await _interfaceAnuncioAnimal.Add(novoAnuncio);
+
                 var midias = new List<Midia>();
                 if (anuncio.Imagens != null && anuncio.Imagens.Count > 0)
                 {
@@ -69,7 +70,7 @@ namespace webApi.Controllers
                         {
                             using (var stream = imagem.OpenReadStream())
                             {
-                                var keyName = $"anuncios/{result.AnuncioId}/list-images/{imagem.FileName}";
+                                var keyName = $"anuncios/{result.AnuncioId}/images/{imagem.FileName}";
                                 var imageUrl = await _s3Service.UploadImageAsync(stream, keyName, imagem.ContentType);
                                 if (imageUrl != null)
                                 {
@@ -93,7 +94,7 @@ namespace webApi.Controllers
             catch (Exception ex)
             {
                 // Log da exceção pode ser adicionado aqui
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 

@@ -23,6 +23,7 @@ export class AuthService {
     ).pipe(
       tap(
         (response)=>{
+          console.log(response.body)
           const authToken = response.body['token'] ?? ''
           this.usuarioService.salvaToken(authToken);
         }

@@ -1,32 +1,86 @@
-.app-header{
-
-  mat-toolbar{
+.app-header {
+  mat-toolbar {
+    height: auto;
     background-color: black;
     color: white;
-    padding: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
 
     .spacer {
-      flex: 1 1 auto;
+      flex: 1;
     }
 
-    .bt_cadastre-se{
+    .bt_cadastre-se {
       background-color: white;
       color: black;
-    }
-
-    button{
-      margin: 0 16px;
-      color: white;
+      padding: 8px 16px;
+      border: none;
       border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s;
+
+      &:hover {
+        background-color: #f0f0f0;
+        transform: scale(1.05);
+      }
     }
 
-    img{
-      padding: 0 20px;
-      width: 50px;
-      background-color: black;
-      color: black;
+    button {
+      margin: 0 8px;
+      padding: 8px 16px;
+      color: white;
+      background: transparent;
+      border: 1px solid white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s;
+
+      &:hover {
+        background-color: white;
+        color: black;
+      }
+
+      &.mat-raised-button {
+        font-weight: bold;
+      }
+
+      &.mat-stroked-button {
+        border-width: 2px;
+      }
+    }
+
+    app-logo {
+      display: flex;
+      align-items: center;
+      img {
+        width: 50px;
+        height: auto;
+        margin-right: 16px;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    mat-toolbar {
+      flex-direction: column;
+      text-align: center;
+
+      .spacer {
+        display: none;
+      }
+
+      button,
+      .bt_cadastre-se {
+        width: 100%;
+        margin: 8px 0;
+      }
+
+      app-logo {
+        img {
+          margin: 0 auto 16px;
+        }
+      }
     }
   }
 }
-
-

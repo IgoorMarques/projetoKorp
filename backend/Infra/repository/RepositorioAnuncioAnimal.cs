@@ -35,12 +35,12 @@ namespace Infra.repository
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<AnuncioAnimal>> GetAnuncioById(int anuncioId)
+        public async Task<AnuncioAnimal> GetAnuncioById(int anuncioId)
         {
             return await _context.Set<AnuncioAnimal>()
                 .Where(a=>a.AnuncioId == anuncioId)
                 .Include(a => a.Midias)
-                .ToListAsync();
+                .FirstOrDefaultAsync();
         }
     }
 }

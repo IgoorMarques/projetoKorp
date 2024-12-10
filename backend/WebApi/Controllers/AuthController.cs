@@ -50,7 +50,8 @@ namespace webApi.Controllers
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user == null || !(await _userManager.CheckPasswordAsync(user, model.Password)))
             {
-                return Unauthorized("Usuário ou senha inválidos.");
+                return Unauthorized(new { message = "Email ou senha incorretos, verifique suas credenciais" });
+
             }
 
             var token = GenerateJwtToken(user);
@@ -60,20 +61,13 @@ namespace webApi.Controllers
 
         private string GenerateJwtToken(Usuario user)
         {
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email)
-            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
+                audience: user.Id,
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: credentials
             );

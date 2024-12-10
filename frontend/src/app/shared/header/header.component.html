@@ -1,9 +1,9 @@
 <header class="app-header">
   <mat-toolbar>
-    <img src="assets/imagens/logo.jpeg" alt="Banner da aplicação">
-    <span >Adota Aqui</span>
+    <app-logo></app-logo>
     <span class="spacer"></span>
     <button mat-button *ngIf="estaLogado()" (click)="logout()">Logout</button>
+    <button mat-button *ngIf="estaLogado()"  routerLink='create-anuncio'>Anunciar</button>
     <button mat-raised-button class="bt_cadastre-se" routerLink='create-account' *ngIf="!estaLogado()">CADASTRE-SE</button>
     <button mat-stroked-button  routerLink='login'  *ngIf="!estaLogado()">Entrar</button>
 
