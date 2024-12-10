@@ -1,8 +1,8 @@
 .criar-conta {
   form {
-    max-width: auto;
     display: flex;
     flex-direction: column;
+    max-width: 100%;
 
     .error-messages {
       color: red;
@@ -17,24 +17,31 @@
       flex-direction: column;
 
       mat-form-field {
-        width: 100%; // Garante que o campo ocupe todo o espaço disponível
+        width: 100%;
       }
     }
 
     .row {
       display: flex;
-      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
       justify-content: center;
 
       .spacer {
-        margin: 0 10px;
+        flex: 1;
+        min-width: 10px;
       }
-    }
 
-    .colunm{
-      max-width: auto;
-      display: flex;
-      flex-direction: column;
+      .colunm {
+        flex: 1;
+        min-width: 280px;
+        display: flex;
+        flex-direction: column;
+
+        mat-form-field {
+          width: 100%;
+        }
+      }
     }
 
     .bt-criar-conta {
@@ -46,6 +53,7 @@
       font-size: 16px;
       text-transform: uppercase;
       cursor: pointer;
+      transition: background-color 0.3s;
 
       &:hover {
         background-color: #333;
@@ -54,6 +62,42 @@
 
     .checked-box-margin {
       margin-bottom: 10px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .criar-conta {
+    form {
+      .row {
+        flex-direction: column;
+
+        .colunm {
+          min-width: 100%;
+          margin-bottom: 10px;
+        }
+      }
+
+      .bt-criar-conta {
+        font-size: 14px;
+        padding: 8px 12px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .criar-conta {
+    margin-bottom: 20px;
+    form {
+      .error-messages {
+        font-size: 10px;
+      }
+
+      .bt-criar-conta {
+        font-size: 14px;
+        padding: 8px 10px;
+      }
     }
   }
 }

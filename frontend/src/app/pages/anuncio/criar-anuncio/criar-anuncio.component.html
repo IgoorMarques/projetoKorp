@@ -2,7 +2,6 @@
   <mat-card-title class="ad-card-title">Cadastro de Anúncio</mat-card-title>
   <mat-card-content class="ad-card-content">
     <form [formGroup]="adForm" (ngSubmit)="onSubmit()">
-
       <mat-form-field appearance="fill" class="full-width">
         <mat-label>Título do anúncio</mat-label>
         <input matInput formControlName="titulo" required />
@@ -33,11 +32,8 @@
         <input matInput formControlName="especie" required />
       </mat-form-field>
 
+      <input type="file" (change)="onImageSelect($event)" multiple />
 
-        <input type="file" (change)="onImageSelect($event)" multiple />
-
-
-      <!-- Lista de imagens adicionadas -->
       <div class="image-preview">
         <div *ngFor="let image of imagePreviews; let i = index" class="image-container">
           <img [src]="image" alt="Image Preview" class="preview-image" />

@@ -1,34 +1,36 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
-const KEY = 'authToken';
-
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class TokenService {
-  constructor(@Inject(PLATFORM_ID) private platformId: any) {}
 
-  hasToken(): boolean {
-    return !!this.getToken();
-  }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-  setToken(token: any): void {
+  setToken(token: string) {
     if (isPlatformBrowser(this.platformId)) {
-      window.localStorage.setItem(KEY, token);
+      localStorage.setItem('token', token);
     }
   }
 
   getToken(): string | null {
     if (isPlatformBrowser(this.platformId)) {
-      return window.localStorage.getItem(KEY);
+      return localStorage.getItem('token');
     }
     return null;
   }
 
-  removeToken(): void {
+  removeToken() {
     if (isPlatformBrowser(this.platformId)) {
-      window.localStorage.removeItem(KEY);
+      localStorage.removeItem('token');
     }
+  }
+
+  hasToken(): boolean {
+    if (isPlatformBrowser(this.platformId)) {
+      return !!localStorage.getItem('token');
+    }
+    return false;
   }
 }

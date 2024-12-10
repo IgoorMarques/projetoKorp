@@ -104,7 +104,7 @@ namespace webApi.Controllers
         {
             if (conversaModel == null)
             {
-                return BadRequest("Dados da conversa inválidos");
+                return BadRequest(new {message = "Dados da conversa inválidos" });
             }
 
             Conversa conversaExistente = await _interfaceConversa.GetEntityByID(conversaId);
@@ -171,14 +171,14 @@ namespace webApi.Controllers
             Usuario? usuario = await _userManager.FindByIdAsync(novaMensagem.RemetenteId);
             if (usuario == null)
             {
-                return NotFound("Usuario não encontrado para o id informado");
+                return NotFound(new {message = "Usuario não encontrado para o id informado"});
             }
 
             Conversa conversa = await _interfaceConversa.GetEntityByID(novaMensagem.ConversaId);
 
             if (conversa == null)
             {
-                return NotFound("Conversa não encontrada para o id informado");
+                return NotFound(new { message = "Conversa não encontrada para o id informado" });
             }
 
             try

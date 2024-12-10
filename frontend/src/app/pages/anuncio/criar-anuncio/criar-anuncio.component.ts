@@ -33,8 +33,6 @@ export class CriarAnuncioComponent implements OnInit{
   imagens: File[] = [];
   imagePreviews: string[] = [];
 
-
-
   constructor(private fb: FormBuilder, private anuncioService: AnuncioService, private usuarioService:UsuarioService, private router: Router) {
     this.adForm = this.fb.group({
       titulo: ['', Validators.required],
@@ -51,54 +49,61 @@ export class CriarAnuncioComponent implements OnInit{
 
   onSubmit() {
     if (this.adForm.valid) {
-      if(!this.usuarioService.estaLogado()){
-        this.router.navigate(['login'])
-      }else{
-        this.usuarioService.retornaUsuario().subscribe(usuario => {
-          const adData: CriarAnuncio = {
-            titulo: this.adForm.value.titulo,
-            descricao: this.adForm.value.descricao,
-            nomeAnimal: this.adForm.value.nomeAnimal,
-            tamanho: this.adForm.value.tamanho,
-            idade: this.adForm.value.idade,
-            especie: this.adForm.value.especie,
-            anuncianteId: usuario.aud!,
-            imagens: this.imagens
-          };
-          this.anuncioService.createAnuncio(adData).subscribe(()=>{
-            Swal.fire({
-              icon: 'success',
-              title: 'Anuncio cadastrado com sucesso!',
-                text: 'Seu anuncio já está disponível na plataforma',
-              showConfirmButton: false,
-              timer: 1000,
-              timerProgressBar: true,
-              backdrop: true,
-              toast: true,
-              position: 'top-end',
-              }).then(() => {
-                this.adForm.reset()
-                this.imagePreviews = []
-                this.imagens = []
-              })
-          },(error) => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Erro ao criar conta',
-              text: error.error.message || 'Falha no servidor, tente novamente mais tarde.',
-              showConfirmButton: true,
-            });
-          })
+      this.usuarioService.retornaUsuario().subscribe(usuario => {
+        if(usuario.aud){
+          console.log(usuario)
+        const adData: CriarAnuncio = {
+          titulo: this.adForm.value.titulo,
+          descricao: this.adForm.value.descricao,
+          nomeAnimal: this.adForm.value.nomeAnimal,
+          tamanho: this.adForm.value.tamanho,
+          idade: this.adForm.value.idade,
+          especie: this.adForm.value.especie,
+          anuncianteId: usuario.aud!,
+          imagens: this.imagens
+        };
+        this.anuncioService.createAnuncio(adData).subscribe(()=>{
+          Swal.fire({
+            icon: 'success',
+            title: 'Anuncio cadastrado com sucesso!',
+              text: 'Seu anuncio já está disponível na plataforma',
+            showConfirmButton: false,
+            timer: 1000,
+            timerProgressBar: true,
+            backdrop: true,
+            toast: true,
+            position: 'top-end',
+            }).then(() => {
+              this.adForm.reset()
+              this.imagePreviews = []
+              this.imagens = []
+            })
         },(error) => {
           Swal.fire({
             icon: 'error',
-            title: 'Falha ao obter suas credenciais',
+            title: 'Erro ao criar conta',
+            text: error.error.message || 'Falha no servidor, tente novamente mais tarde.',
+            showConfirmButton: true,
+          });
+        })
+        }else{
+          Swal.fire({
+            icon: 'error',
+            title: 'Sessão expirada',
             showConfirmButton: true,
           }).then(() => {
             this.router.navigate(['login']);
         })
-      });
-      }
+        }
+      },(error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Falha ao obter suas credenciais',
+          showConfirmButton: true,
+        }).then(() => {
+          this.router.navigate(['login']);
+      })
+    });
     }
   }
 

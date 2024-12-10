@@ -41,7 +41,7 @@ namespace webApi.Controllers
             var usuario = await _userManager.FindByIdAsync(anuncio.AnuncianteId);
             if (usuario == null)
             {
-                return BadRequest("Dados do usuário inválidos");
+                return BadRequest(new { message = "Usuario não encontrdo para o id informado" });
             }
 
             try
@@ -148,7 +148,7 @@ namespace webApi.Controllers
         {
             if (anuncio == null)
             {
-                return BadRequest("Dados do anuncio inválidos");
+                return BadRequest(new { message = "Dados do anuncio inválidos" });
             }
 
             AnuncioAnimal anuncioEncontrado = await _interfaceAnuncioAnimal.GetEntityByID(anuncioId);
