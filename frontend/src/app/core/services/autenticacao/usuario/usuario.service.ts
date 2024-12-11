@@ -45,4 +45,17 @@ export class UsuarioService {
     return this.tokenService.hasToken();
   }
 
+  getIdUserFromToken(): string | null {
+    const token = this.tokenService.getToken();
+    if (token) {
+      try {
+        const decoded = jwtDecode<DecodedJwtToken>(token);
+        return decoded.aud!;
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+    return null; // Retorna null se não houver token ou se houver erro
+  }
+
 }

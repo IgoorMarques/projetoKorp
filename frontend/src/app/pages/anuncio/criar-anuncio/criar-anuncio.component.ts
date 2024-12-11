@@ -12,6 +12,8 @@ import Swal from 'sweetalert2';
 import { AnuncioService } from '../../../core/services/adocao/adocao.service';
 import { CriarAnuncio } from '../../../core/services/adocao/models/criarAnuncio';
 import { Router } from '@angular/router';
+import {MatProgressBarModule} from  '@angular/material/progress-bar' ;
+
 
 @Component({
   selector: 'app-criar-anuncio',
@@ -23,7 +25,8 @@ import { Router } from '@angular/router';
     MatCardModule,
     MatButtonModule,
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressBarModule
   ],
   templateUrl: './criar-anuncio.component.html',
   styleUrls: ['./criar-anuncio.component.scss']
@@ -32,6 +35,7 @@ export class CriarAnuncioComponent implements OnInit{
   adForm: FormGroup;
   imagens: File[] = [];
   imagePreviews: string[] = [];
+  carregando: boolean = false;
 
   constructor(private fb: FormBuilder, private anuncioService: AnuncioService, private usuarioService:UsuarioService, private router: Router) {
     this.adForm = this.fb.group({
@@ -44,14 +48,15 @@ export class CriarAnuncioComponent implements OnInit{
     });
   }
   ngOnInit(): void {
-
+      console.log(this.usuarioService.getIdUserFromToken())
   }
 
   onSubmit() {
+    this.carregando = true;
     if (this.adForm.valid) {
-      this.usuarioService.retornaUsuario().subscribe(usuario => {
-        if(usuario.aud){
-          console.log(usuario)
+      console.log(this.carregando)
+      var usuarioId = this.usuarioService.getIdUserFromToken()
+        if(usuarioId){
         const adData: CriarAnuncio = {
           titulo: this.adForm.value.titulo,
           descricao: this.adForm.value.descricao,
@@ -59,9 +64,10 @@ export class CriarAnuncioComponent implements OnInit{
           tamanho: this.adForm.value.tamanho,
           idade: this.adForm.value.idade,
           especie: this.adForm.value.especie,
-          anuncianteId: usuario.aud!,
+          anuncianteId: usuarioId!,
           imagens: this.imagens
         };
+
         this.anuncioService.createAnuncio(adData).subscribe(()=>{
           Swal.fire({
             icon: 'success',
@@ -81,11 +87,12 @@ export class CriarAnuncioComponent implements OnInit{
         },(error) => {
           Swal.fire({
             icon: 'error',
-            title: 'Erro ao criar conta',
+            title: 'Erro ao criar anuncio',
             text: error.error.message || 'Falha no servidor, tente novamente mais tarde.',
             showConfirmButton: true,
           });
         })
+
         }else{
           Swal.fire({
             icon: 'error',
@@ -94,16 +101,9 @@ export class CriarAnuncioComponent implements OnInit{
           }).then(() => {
             this.router.navigate(['login']);
         })
-        }
-      },(error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Falha ao obter suas credenciais',
-          showConfirmButton: true,
-        }).then(() => {
-          this.router.navigate(['login']);
-      })
-    });
+      }
+    this.carregando = false;
+
     }
   }
 

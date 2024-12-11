@@ -1,5 +1,5 @@
 import { UsuarioService } from './../../core/services/autenticacao/usuario/usuario.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTableModule } from '@angular/material/table';
 import { Anuncio } from '../../core/services/adocao/models/adocao';
@@ -9,6 +9,8 @@ import { CommonModule } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { GenericDialogComponent } from '../../shared/generic-dialog/generic-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 export interface Imagens {
   color: string;
@@ -50,12 +52,29 @@ export class DetalhesAnuncioComponent implements OnInit {
   mensagens: string[] = [];
   indexImgSelecionada: number = 0;
 
+  readonly dialog = inject(MatDialog);
+
+  openDialog() {
+    this.dialog.open(GenericDialogComponent, {
+      data: {
+        title: 'Não autenticado',
+        conteudo: 'Faça login para enviar mensagens',
+        btMsg: 'Fazer login',
+        onBtClick: () => {
+          console.log('Botão clicado no diálogo!');
+          this.router.navigate(['login'])
+        },
+      },
+    });
+  }
+
+
   // Simula a abertura do chat
   abrirChat() {
     if(this.userService.estaLogado()){
       this.chatAberto = true;
     }else{
-      this.router.navigate(['login'])
+      this.openDialog();
     }
 
   }

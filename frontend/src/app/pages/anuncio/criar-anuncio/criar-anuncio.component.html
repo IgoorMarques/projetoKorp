@@ -1,6 +1,9 @@
-<mat-card class="ad-card">
-  <mat-card-title class="ad-card-title">Cadastro de Anúncio</mat-card-title>
-  <mat-card-content class="ad-card-content">
+<mat-progress-bar mode="indeterminate" *ngIf="carregando"></mat-progress-bar>
+
+
+<mat-card class="anuncio-card">
+  <mat-card-title class="anuncio-card-title">Cadastro de Anúncio</mat-card-title>
+  <mat-card-content class="anuncio-card-content">
     <form [formGroup]="adForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="fill" class="full-width">
         <mat-label>Título do anúncio</mat-label>
@@ -32,12 +35,18 @@
         <input matInput formControlName="especie" required />
       </mat-form-field>
 
-      <input type="file" (change)="onImageSelect($event)" multiple />
+      <div class="custom-file-upload">
+        <label for="file-input" class="file-label">
+          <span class="file-text">Selecione as imagens</span>
+        </label>
+        <input id="file-input" type="file" (change)="onImageSelect($event)" multiple />
+      </div>
+
 
       <div class="image-preview">
         <div *ngFor="let image of imagePreviews; let i = index" class="image-container">
           <img [src]="image" alt="Image Preview" class="preview-image" />
-          <button mat-icon-button color="warn" (click)="removeImage(i)" type="button">
+          <button mat-icon-button class="bt-delete" color="warn" (click)="removeImage(i)" type="button">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
